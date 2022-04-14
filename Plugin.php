@@ -4,7 +4,7 @@
  * 
  * @package Comment2Wechat
  * @author Y!an
- * @version 1.1.0
+ * @version 1.0.0
  * @link https://yian.me
  */
 class Comment2Wechat_Plugin implements Typecho_Plugin_Interface
@@ -45,8 +45,7 @@ class Comment2Wechat_Plugin implements Typecho_Plugin_Interface
      */
     public static function config(Typecho_Widget_Helper_Form $form)
     {
-        $key = new Typecho_Widget_Helper_Form_Element_Text('sckey', NULL, NULL, _t('SCKEY'), _t('SCKEY 需要在 <a href="http://sc.ftqq.com/">Server酱</a> 注册<br />
-        同时，注册后需要在 <a href="http://sc.ftqq.com/">Server酱</a> 绑定你的微信号才能收到推送'));
+        $key = new Typecho_Widget_Helper_Form_Element_Text('sckey', NULL, NULL, _t('SCKEY'), _t('SCKEY 需要在 <a href="http://sct.ftqq.com/login/">Server酱</a> 登陆你的微信号才能收到推送'));
         $form->addInput($key->addRule('required', _t('您必须填写一个正确的 SCKEY')));
     }
     
@@ -74,7 +73,7 @@ class Comment2Wechat_Plugin implements Typecho_Plugin_Interface
         $sckey = $options->plugin('Comment2Wechat')->sckey;
 
         $text = "有人在您的博客发表了评论";
-        $desp = "**".$comment['author']."** 在 [「".$post->title."」](".$post->permalink." \"".$post->title."\") 中说到: \n\n > ".$comment['text'];
+        $desp = "**".$comment['author']."** 在你的博客中说到：\n\n > ".$comment['text'];
 
         $postdata = http_build_query(
             array(
@@ -91,7 +90,7 @@ class Comment2Wechat_Plugin implements Typecho_Plugin_Interface
                 )
             );
         $context  = stream_context_create($opts);
-        $result = file_get_contents('http://sc.ftqq.com/'.$sckey.'.send', false, $context);
+        $result = file_get_contents('https://sctapi.ftqq.com/'.$sckey.'.send', false, $context);
         return  $comment;
     }
 }
